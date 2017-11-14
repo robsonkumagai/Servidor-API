@@ -1,0 +1,96 @@
+<html>
+<head>
+    <style>
+        body {
+            background: url('background.jpg') no-repeat fixed center center;
+            background-size: cover;
+            font-family: Montserrat;
+        }
+
+        .login-block {
+            width: 450px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            border-top: 5px solid #d3d3d3;
+            margin: 0 auto;
+            margin-top: 20px;
+            top: 100px;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <script src="https://use.fontawesome.com/0c1c609563.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+        function index() {
+            window.location.href = "index.html";
+        }
+
+        function login() {
+            window.location.href = "login.html";
+        }
+
+        function envia() {
+            var $name       = $('#name');
+            var $email      = $('#email');
+            var $password   = $('#password');
+            var $c_password = $('#c_password');
+
+            var cadastro = {
+                name: $name.val(),
+                email: $email.val(),
+                password: $password.val(),
+                c_password: $c_password.val()
+            };
+            $.ajax({
+                url:'http://127.0.0.1:8000/api/register',
+                type: 'POST',
+                data: cadastro,
+                success:function (data) {
+                    alert('Voce foi cadastrado com sucesso!');
+                    window.location.href = "login.html";
+                },
+                error:function (data) {
+                    alert('Erro ao se cadastrar!');
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div class="login-block">
+        <form style="">
+            <div class="form-group" style="margin-top: 20px; color: white">
+                <h1 style="color: gray">Cadastrar <i class="fa fa-hand-spock-o" aria-hidden="true"></i></h1>
+            </div>
+            <div class="form-group">
+                <label for="name">Nome</label>
+                <input type="name" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Nome">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="password" placeholder="Senha">
+            </div>
+            <div class="form-group">
+                <label for="c_password">Repetir Senha</label>
+                <input type="password" class="form-control" id="c_password" placeholder="Repetir senha">
+            </div>
+            <div class="form-group" style="margin-top: 40px">
+                <input type="button" onclick="return envia();" class="btn btn-primary" value="Cadastrar">
+                <input type="button" onclick="return login();" class="btn btn-info" value="Login">
+                <input type="button" onclick="return index();" class="btn btn-success" value="Index">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

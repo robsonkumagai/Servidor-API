@@ -1,0 +1,132 @@
+<html>
+<head>
+    <style>
+        body {
+            background: url('background.jpg') no-repeat fixed center center;
+            background-size: cover;
+            font-family: Montserrat;
+        }
+
+        .login-block {
+            width: 800px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            border-top: 5px solid #d3d3d3;
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            top: 100px;
+        }
+
+        .tabela {
+            width: 764px;
+            background: #f5f1f1;
+            border-radius: 5px;
+            margin: 0 auto;
+            right: 150px;
+            top: 150px;
+        }
+
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <script src="https://use.fontawesome.com/0c1c609563.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+
+        var token = window.localStorage.getItem('token');
+
+        function cadastrar() {
+            window.location.href = "cadastro.html";
+        }
+
+        function apagar(id) {
+            $.ajax({
+                url:'http://127.0.0.1:8000/api/apagar/' + id,
+                type: 'DELETE',
+                headers: {
+                    'Authorization' : 'Bearer ' + token
+                },
+                success:function (data) {
+                    alert('Usuário apagado com sucesso!');
+                    location.reload();
+                    //console.log(data)
+                    //$nome = data.status.name;
+                    //$('h1').html('Seja bem vindo - ' + $nome);
+                },
+                error:function (data) {
+                    alert('Erro ao apagar usuario!');
+                    //window.location.href = "login.html";
+                }
+            });
+        }
+
+        $.ajax({
+            url:'http://127.0.0.1:8000/api/get-details',
+            type: 'POST',
+            headers: {
+                'Authorization' : 'Bearer ' + token
+            },
+            success:function (data) {
+                $nome = data.data[0].name;
+                $('h1').html('Seja bem vindo - ' + $nome);
+            },
+            error:function (data) {
+                alert('Acesso nao autorizado!');
+                window.location.href = "login.html";
+            }
+        });
+
+        $.ajax({
+            url:'http://127.0.0.1:8000/api/clientes',
+            type: 'GET',
+            headers: {
+                'Authorization' : 'Bearer ' + token
+            },
+            success:function (data) {
+                //console.log(data.data)
+
+                for(var i=0;data.data[0].length>i;i++){
+                    var ids = data.data[0][i].id;
+
+                    $('#tabela').append(
+                        '<tr><td>'+data.data[0][i].id+
+                        '</td><td>'+data.data[0][i].name+
+                        '</td><td>'+data.data[0][i].email+
+                        '</td><td>'+data.data[0][i].guid+
+                        //'</td><td>'+"<a href='#' onclick='apagar()'><i class='fa fa-times' aria-hidden='true'></i></a>"+'</td><td>' +
+                        '');
+                }
+            },
+            error:function (data) {
+                window.location.href = "login.html";
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+<div class="login-block">
+    <h1 style="color: gray"></h1>
+
+    <div style="margin-top: 20px">
+        <h4>Dados recebidos pelo GET</h4>
+
+        <table class="tabela" id="tabela" style="margin-top: 20px">
+            <td style="width: 50px"><strong>ID</strong></td>
+            <td style="width: 150px"><strong>Nome</strong></td>
+            <td style="width: 200px"><strong>Email</strong></td>
+            <td><strong>Guid</strong></td>
+        </table>
+    </div>
+
+    <button style="margin-top: 25px; margin-bottom: 25px" onclick="cadastrar()" class="btn btn-primary">Cadastrar Usuario</button>
+</div>
+
+</body>
+</html>
